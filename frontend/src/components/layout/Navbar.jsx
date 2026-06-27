@@ -88,7 +88,9 @@ const Navbar = () => {
 
             {/* Desktop Navigation */}
 
-            <NavLinks />
+            <div className="flex-1 flex justify-center">
+              <NavLinks />
+            </div>
 
             {/* Desktop Actions */}
 

@@ -4,7 +4,7 @@ import {
   FaPlus,
   FaTrash,
   FaHeart,
-} from "../utils/icons";
+} from "../../utils/icons";
 
 import GlassCard from "../ui/GlassCard";
 

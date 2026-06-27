@@ -13,7 +13,7 @@ export const addToWishlist = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Product added to wishlist successfully.",
-      wishlist
+      { wishlist }
     )
   );
 });
@@ -28,7 +28,7 @@ export const getWishlist = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Wishlist fetched successfully.",
-      wishlist
+      { wishlist }
     )
   );
 });
@@ -44,7 +44,7 @@ export const removeFromWishlist = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Product removed from wishlist successfully.",
-      wishlist
+      { wishlist }
     )
   );
 });

@@ -1,12 +1,7 @@
-function App() {
-  console.log(import.meta.env);
+import AppRoutes from "./routes/AppRoutes";
 
-  return (
-    <div>
-      <h1>{import.meta.env.VITE_APP_NAME}</h1>
-      <p>{import.meta.env.VITE_API_URL}</p>
-    </div>
-  );
+function App() {
+  return <AppRoutes />;
 }
 
 export default App;

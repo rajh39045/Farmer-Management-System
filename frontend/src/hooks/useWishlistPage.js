@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import {
   getWishlist,
-  removeWishlistItem,
+  removeFromWishlist,
 } from "../api/wishlistApi";
 
 import {
@@ -14,17 +14,19 @@ const useWishlistPage = () => {
   const [wishlistItems, setWishlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  /**
-   * Fetch Wishlist
-   */
   const fetchWishlist = useCallback(async () => {
     try {
       setLoading(true);
 
       const response = await getWishlist();
 
+      const products =
+        response?.wishlist?.products || [];
+
       setWishlistItems(
-        response.wishlist?.items || []
+        products.map((product) => ({
+          product,
+        }))
       );
     } catch (error) {
       toast.error(
@@ -40,12 +42,9 @@ const useWishlistPage = () => {
     fetchWishlist();
   }, [fetchWishlist]);
 
-  /**
-   * Remove Item
-   */
   const removeItem = async (productId) => {
     try {
-      await removeWishlistItem(productId);
+      await removeFromWishlist(productId);
 
       toast.success("Removed from wishlist.");
 
@@ -58,9 +57,6 @@ const useWishlistPage = () => {
     }
   };
 
-  /**
-   * Move To Cart
-   */
   const moveToCart = async (productId) => {
     try {
       await addToCart({
@@ -68,7 +64,7 @@ const useWishlistPage = () => {
         quantity: 1,
       });
 
-      await removeWishlistItem(productId);
+      await removeFromWishlist(productId);
 
       toast.success(
         "Product moved to cart."
@@ -83,13 +79,7 @@ const useWishlistPage = () => {
     }
   };
 
-  /**
-   * Total Wishlist Items
-   */
-  const totalItems = useMemo(
-    () => wishlistItems.length,
-    [wishlistItems]
-  );
+  const totalItems = wishlistItems.length;
 
   return {
     loading,

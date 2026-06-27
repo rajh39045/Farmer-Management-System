@@ -8,14 +8,16 @@ import {
   placeOrder,
   getMyOrders,
   getFarmerOrders,
+  getAllOrders,
+  getOrderById,
   updateOrderStatus,
+  cancelOrder,
+  deleteOrder,
 } from "../controllers/order.controller.js";
 
 import { placeOrderValidator } from "../validators/order.validator.js";
 
 const router = Router();
-
-/* Customer */
 
 router.post(
   "/",
@@ -33,7 +35,12 @@ router.get(
   getMyOrders
 );
 
-/* Farmer */
+router.get(
+  "/my",
+  protect,
+  authorize("customer"),
+  getMyOrders
+);
 
 router.get(
   "/farmer-orders",
@@ -42,11 +49,45 @@ router.get(
   getFarmerOrders
 );
 
+router.get(
+  "/",
+  protect,
+  authorize("admin"),
+  getAllOrders
+);
+
+router.get(
+  "/:id",
+  protect,
+  getOrderById
+);
+
 router.patch(
   "/:id/status",
   protect,
   authorize("farmer"),
   updateOrderStatus
+);
+
+router.put(
+  "/:id/status",
+  protect,
+  authorize("farmer"),
+  updateOrderStatus
+);
+
+router.patch(
+  "/:id/cancel",
+  protect,
+  authorize("customer"),
+  cancelOrder
+);
+
+router.delete(
+  "/:id",
+  protect,
+  authorize("admin"),
+  deleteOrder
 );
 
 export default router;

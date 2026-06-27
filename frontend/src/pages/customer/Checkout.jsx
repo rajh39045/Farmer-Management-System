@@ -72,7 +72,7 @@ const Checkout = () => {
 
           {/* Right Side */}
 
-          <div className="space-y-6">
+          <div className="space-y-6 lg:sticky lg:top-24 self-start z-10">
 
             <OrderSummary
               cartItems={cartItems}

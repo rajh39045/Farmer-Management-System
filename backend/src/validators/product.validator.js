@@ -16,21 +16,17 @@ export const createProductValidator = [
     .withMessage("Description is required"),
 
   body("price")
+    .notEmpty()
     .isFloat({ min: 1 })
     .withMessage("Price must be greater than 0"),
 
   body("unit")
-    .isIn([
-      "kg",
-      "gram",
-      "liter",
-      "piece",
-      "dozen",
-      "packet",
-    ])
+    .optional()
+    .isIn(["kg", "gram", "liter", "piece", "dozen", "packet"])
     .withMessage("Invalid unit"),
 
   body("quantity")
+    .notEmpty()
     .isInt({ min: 0 })
     .withMessage("Quantity must be at least 0"),
 

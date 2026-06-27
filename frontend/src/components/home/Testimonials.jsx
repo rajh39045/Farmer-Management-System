@@ -5,15 +5,16 @@ import {
   cardHover,
 } from "../../animations/framerVariants";
 
+import SafeImage from "../common/SafeImage";
 import { FaStar } from "../../utils/icons";
+import { TESTIMONIAL_AVATARS } from "../../utils/images";
 
 const testimonials = [
   {
     id: 1,
     name: "Rahul Sharma",
     role: "Customer",
-    image:
-      "https://randomuser.me/api/portraits/men/32.jpg",
+    image: TESTIMONIAL_AVATARS.customer1,
     rating: 5,
     review:
       "The vegetables were incredibly fresh and delivered on time. I love buying directly from farmers.",
@@ -22,8 +23,7 @@ const testimonials = [
     id: 2,
     name: "Anita Kumari",
     role: "Farmer",
-    image:
-      "https://randomuser.me/api/portraits/women/44.jpg",
+    image: TESTIMONIAL_AVATARS.farmer1,
     rating: 5,
     review:
       "Krishi Market helped me reach more customers and sell my products at a fair price.",
@@ -32,8 +32,7 @@ const testimonials = [
     id: 3,
     name: "Rohit Verma",
     role: "Customer",
-    image:
-      "https://randomuser.me/api/portraits/men/65.jpg",
+    image: TESTIMONIAL_AVATARS.customer2,
     rating: 5,
     review:
       "Simple ordering process, secure payments, and excellent quality products every time.",
@@ -81,7 +80,7 @@ const Testimonials = () => {
               >
                 <div className="flex items-center gap-4">
 
-                  <img
+                  <SafeImage
                     src={item.image}
                     alt={item.name}
                     className="

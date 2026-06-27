@@ -5,17 +5,23 @@ import { gsap } from "gsap";
 import { getAllProducts } from "../../api/productApi";
 
 import ProductCard from "../product/ProductCard";
-import ProductSkeleton from "../product/ProductSkeleton";
+import ProductSkeleton from "../common/ProductSkeleton";
+import EmptyState from "../ui/EmptyState";
 
 const FeaturedProducts = () => {
   const sectionRef = useRef(null);
 
   const [products, setProducts] = useState([]);
-
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (loading || products.length === 0) return;
+    if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
       gsap.from(".featured-card", {
@@ -24,20 +30,25 @@ const FeaturedProducts = () => {
         stagger: 0.15,
         duration: 1,
       });
-    }, sectionRef);
+    }, sectionRef.current);
 
     return () => ctx.revert();
-  }, []);
+  }, [loading, products.length]);
 
   const fetchProducts = async () => {
     try {
+      setError("");
       const data = await getAllProducts({
         limit: 8,
       });
 
       setProducts(data.products || []);
-    } catch (error) {
-      console.error(error);
+    } catch (fetchError) {
+      console.error(fetchError);
+      setError(
+        fetchError.response?.data?.message ||
+          "Unable to load featured products."
+      );
     } finally {
       setLoading(false);
     }
@@ -84,6 +95,20 @@ const FeaturedProducts = () => {
 
         {loading ? (
           <ProductSkeleton count={8} />
+        ) : error ? (
+          <EmptyState
+            title="Could not load products"
+            description={error}
+            buttonText="Browse Products"
+            buttonLink="/products"
+          />
+        ) : products.length === 0 ? (
+          <EmptyState
+            title="No products available yet"
+            description="Check back soon for fresh produce from verified farmers."
+            buttonText="Browse Marketplace"
+            buttonLink="/products"
+          />
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
 

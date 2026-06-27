@@ -2,7 +2,6 @@ import orderService from "../services/order.service.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
-// Place Order
 export const placeOrder = asyncHandler(async (req, res) => {
   const order = await orderService.placeOrder(
     req.user._id,
@@ -18,7 +17,6 @@ export const placeOrder = asyncHandler(async (req, res) => {
   );
 });
 
-// Customer Order History
 export const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await orderService.getCustomerOrders(req.user._id);
 
@@ -26,12 +24,11 @@ export const getMyOrders = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Orders fetched successfully.",
-      orders
+      { orders }
     )
   );
 });
 
-// Farmer Orders
 export const getFarmerOrders = asyncHandler(async (req, res) => {
   const orders = await orderService.getFarmerOrders(req.user._id);
 
@@ -39,17 +36,47 @@ export const getFarmerOrders = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Farmer orders fetched successfully.",
-      orders
+      { orders }
     )
   );
 });
 
-// Update Order Status
+export const getAllOrders = asyncHandler(async (req, res) => {
+  const data = await orderService.getAllOrders();
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Orders fetched successfully.",
+      data
+    )
+  );
+});
+
+export const getOrderById = asyncHandler(async (req, res) => {
+  const order = await orderService.getOrderById(
+    req.params.id,
+    req.user._id,
+    req.user.role
+  );
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Order fetched successfully.",
+      { order }
+    )
+  );
+});
+
 export const updateOrderStatus = asyncHandler(async (req, res) => {
+  const orderStatus =
+    req.body.orderStatus || req.body.status;
+
   const order = await orderService.updateOrderStatus(
     req.params.id,
     req.user._id,
-    req.body.orderStatus
+    orderStatus
   );
 
   res.status(200).json(
@@ -57,6 +84,32 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
       200,
       "Order status updated successfully.",
       order
+    )
+  );
+});
+
+export const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await orderService.cancelOrder(
+    req.params.id,
+    req.user._id
+  );
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Order cancelled successfully.",
+      order
+    )
+  );
+});
+
+export const deleteOrder = asyncHandler(async (req, res) => {
+  await orderService.deleteOrder(req.params.id);
+
+  res.status(200).json(
+    new ApiResponse(
+      200,
+      "Order deleted successfully."
     )
   );
 });

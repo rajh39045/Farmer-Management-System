@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { cardHover } from "../../animations/framerVariants";
+import { cardHover } from "../animations/framerVariants";
 
 const GlassCard = ({
   children,

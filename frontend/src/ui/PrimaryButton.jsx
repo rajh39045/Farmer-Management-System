@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { buttonHover } from "../../animations/framerVariants";
+import { buttonHover } from "../animations/framerVariants";
 
 const PrimaryButton = ({
   children,

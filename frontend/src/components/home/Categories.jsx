@@ -4,16 +4,28 @@ import { motion } from "framer-motion";
 import { gsap } from "gsap";
 
 import { getAllCategories } from "../../api/categoryApi";
+import EmptyState from "../ui/EmptyState";
+import SafeImage from "../common/SafeImage";
+import {
+  getCategoryImage,
+  getCategoryKey,
+  normalizeCategories,
+} from "../../utils/categories";
 
 const Categories = () => {
   const sectionRef = useRef(null);
 
   const [categories, setCategories] = useState([]);
-
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    if (loading || categories.length === 0) return;
+    if (!sectionRef.current) return;
 
     const ctx = gsap.context(() => {
       gsap.from(".category-card", {
@@ -23,18 +35,19 @@ const Categories = () => {
         duration: 1,
         ease: "power3.out",
       });
-    }, sectionRef);
+    }, sectionRef.current);
 
     return () => ctx.revert();
-  }, []);
+  }, [loading, categories.length]);
 
   const fetchCategories = async () => {
     try {
+      setError("");
       const data = await getAllCategories();
-
-      setCategories(data.categories || []);
-    } catch (error) {
-      console.error(error);
+      setCategories(normalizeCategories(data.categories || []));
+    } catch (fetchError) {
+      console.error(fetchError);
+      setError("Unable to load categories right now.");
     } finally {
       setLoading(false);
     }
@@ -56,6 +69,25 @@ const Categories = () => {
               />
             ))}
           </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error || categories.length === 0) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <EmptyState
+            title={error || "No categories yet"}
+            description={
+              error
+                ? "Please refresh the page or try again in a moment."
+                : "Categories will appear here once they are added."
+            }
+            buttonText="Browse Products"
+            buttonLink="/products"
+          />
         </div>
       </section>
     );
@@ -87,7 +119,7 @@ const Categories = () => {
 
           {categories.map((category) => (
             <motion.div
-              key={category._id}
+              key={getCategoryKey(category)}
               whileHover={{
                 y: -10,
                 scale: 1.03,
@@ -109,11 +141,8 @@ const Categories = () => {
                   "
                 >
 
-                  <img
-                    src={
-                      category.image ||
-                      "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80"
-                    }
+                  <SafeImage
+                    src={getCategoryImage(category)}
                     alt={category.name}
                     className="
                       w-full
@@ -129,7 +158,9 @@ const Categories = () => {
                     </h3>
 
                     <p className="text-gray-500 mt-2">
-                      View Products
+                      {category.productCount > 0
+                        ? `${category.productCount} product${category.productCount === 1 ? "" : "s"}`
+                        : "View Products"}
                     </p>
 
                   </div>

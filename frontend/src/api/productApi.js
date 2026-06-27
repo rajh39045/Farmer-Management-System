@@ -47,15 +47,7 @@ export const getMyProducts = async () => {
  * ===============================
  */
 export const createProduct = async (formData) => {
-  const response = await api.post(
-    "/products",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await api.post("/products", formData);
 
   return response.data;
 };
@@ -66,19 +58,8 @@ export const createProduct = async (formData) => {
  * PUT /products/:id
  * ===============================
  */
-export const updateProduct = async (
-  id,
-  formData
-) => {
-  const response = await api.put(
-    `/products/${id}`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+export const updateProduct = async (id, formData) => {
+  const response = await api.put(`/products/${id}`, formData);
 
   return response.data;
 };
@@ -141,6 +122,18 @@ export const getFeaturedProducts = async () => {
   const response = await api.get("/products", {
     params: {
       featured: true,
+    },
+  });
+
+  return response.data;
+};
+
+export const getRelatedProducts = async (params = {}) => {
+  const response = await api.get("/products", {
+    params: {
+      category: params.category,
+      limit: params.limit || 4,
+      exclude: params.exclude,
     },
   });
 

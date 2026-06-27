@@ -1,5 +1,5 @@
 import ProductCard from "./ProductCard";
-import ProductSkeleton from "./ProductSkeleton";
+import ProductSkeleton from "../common/ProductSkeleton";
 import EmptyState from "../ui/EmptyState";
 
 const ProductGrid = ({

@@ -3,6 +3,7 @@ import { Router } from "express";
 import protect from "../middlewares/auth.middleware.js";
 import authorize from "../middlewares/role.middleware.js";
 import validate from "../middlewares/validate.middleware.js";
+import upload from "../middlewares/upload.middleware.js";
 
 import {
   createCategory,
@@ -23,11 +24,12 @@ const router = Router();
 router.get("/", getAllCategories);
 router.get("/:id", getCategoryById);
 
-// Admin Routes
+// Admin & Farmer Routes
 router.post(
   "/",
   protect,
-  authorize("admin"),
+  authorize("admin", "farmer"),
+  upload.single("image"),
   createCategoryValidator,
   validate,
   createCategory
@@ -37,6 +39,7 @@ router.put(
   "/:id",
   protect,
   authorize("admin"),
+  upload.single("image"),
   updateCategoryValidator,
   validate,
   updateCategory
@@ -45,7 +48,7 @@ router.put(
 router.delete(
   "/:id",
   protect,
-  authorize("admin"),
+  authorize("admin", "farmer"),
   deleteCategory
 );
 

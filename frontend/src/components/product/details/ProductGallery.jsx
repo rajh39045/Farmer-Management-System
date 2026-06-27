@@ -2,8 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const ProductGallery = ({ images = [] }) => {
-  const placeholder =
-    "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80";
+  const placeholder = "/placeholder-product.svg";
 
   const galleryImages =
     images.length > 0

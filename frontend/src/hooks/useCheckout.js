@@ -37,7 +37,7 @@ const useCheckout = () => {
       const response = await getCart();
 
       setCartItems(
-        response.cart?.items || []
+        response?.cart?.items || []
       );
     } catch (error) {
       toast.error(
@@ -106,16 +106,13 @@ const useCheckout = () => {
 
       const payload = {
         shippingAddress: address,
+        deliverySlot: "Morning (9 AM - 12 PM)",
         paymentMethod,
       };
 
-      const response =
-        await placeOrder(payload);
+      await placeOrder(payload);
 
-      toast.success(
-        response.message ||
-          "Order placed successfully."
-      );
+      toast.success("Order placed successfully.");
 
       await clearCart();
 

@@ -7,23 +7,29 @@ import {
   removeFromWishlist,
 } from "../api/wishlistApi";
 
+import useAuth from "../hooks/useAuth";
+
 export const WishlistContext = createContext();
 
 const WishlistProvider = ({ children }) => {
+  const { isAuthenticated, user } = useAuth();
+
   const [wishlist, setWishlist] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
-  /**
-   * Fetch Wishlist
-   */
   const fetchWishlist = async () => {
+    if (!isAuthenticated || user?.role !== "customer") {
+      setWishlist([]);
+      return;
+    }
+
     try {
       setLoading(true);
 
       const data = await getWishlist();
 
-      setWishlist(data.wishlist || []);
+      setWishlist(data?.wishlist?.products || []);
     } catch (error) {
       console.error(error);
     } finally {
@@ -31,16 +37,13 @@ const WishlistProvider = ({ children }) => {
     }
   };
 
-  /**
-   * Add Product
-   */
   const addProduct = async (productData) => {
     try {
       setLoading(true);
 
       const data = await addToWishlist(productData);
 
-      setWishlist(data.wishlist || []);
+      setWishlist(data?.wishlist?.products || []);
 
       toast.success("Added to wishlist");
 
@@ -59,16 +62,13 @@ const WishlistProvider = ({ children }) => {
     }
   };
 
-  /**
-   * Remove Product
-   */
   const removeProduct = async (productId) => {
     try {
       setLoading(true);
 
       const data = await removeFromWishlist(productId);
 
-      setWishlist(data.wishlist || []);
+      setWishlist(data?.wishlist?.products || []);
 
       toast.success("Removed from wishlist");
 
@@ -89,7 +89,7 @@ const WishlistProvider = ({ children }) => {
 
   useEffect(() => {
     fetchWishlist();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <WishlistContext.Provider

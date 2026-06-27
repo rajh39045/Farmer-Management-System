@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 
@@ -9,12 +9,17 @@ import {
   FaSearch,
 } from "react-icons/fa";
 
+import SafeImage from "../common/SafeImage";
 import { HERO_IMAGE } from "../../utils/images";
 
 const HeroSection = () => {
   const heroRef = useRef(null);
+  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    if (!heroRef.current) return;
+
     const ctx = gsap.context(() => {
       gsap.from(".hero-content", {
         y: 80,
@@ -38,10 +43,23 @@ const HeroSection = () => {
         duration: 2,
         ease: "power1.inOut",
       });
-    }, heroRef);
+    }, heroRef.current);
 
     return () => ctx.revert();
   }, []);
+
+  const handleSearch = (event) => {
+    event.preventDefault();
+
+    const query = searchQuery.trim();
+
+    if (query) {
+      navigate(`/products?search=${encodeURIComponent(query)}`);
+      return;
+    }
+
+    navigate("/products");
+  };
 
   return (
     <section
@@ -51,8 +69,6 @@ const HeroSection = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24">
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-          {/* Left */}
 
           <div>
 
@@ -84,9 +100,10 @@ const HeroSection = () => {
 
             </p>
 
-            {/* Search */}
-
-            <div className="hero-content mt-10 flex flex-col sm:flex-row gap-4">
+            <form
+              onSubmit={handleSearch}
+              className="hero-content mt-10 flex flex-col sm:flex-row gap-4"
+            >
 
               <div className="relative flex-1">
 
@@ -94,6 +111,8 @@ const HeroSection = () => {
 
                 <input
                   type="text"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
                   placeholder="Search fresh products..."
                   className="w-full pl-11 pr-4 py-4 rounded-full border border-gray-300 bg-white shadow-md outline-none focus:ring-2 focus:ring-green-500"
                 />
@@ -101,6 +120,7 @@ const HeroSection = () => {
               </div>
 
               <motion.button
+                type="submit"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-4 rounded-full bg-green-600 text-white font-semibold shadow-lg"
@@ -108,15 +128,14 @@ const HeroSection = () => {
                 Search
               </motion.button>
 
-            </div>
-
-            {/* Buttons */}
+            </form>
 
             <div className="hero-content mt-10 flex flex-wrap gap-5">
 
               <Link to="/products">
 
                 <motion.button
+                  type="button"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 rounded-full bg-green-600 text-white font-semibold flex items-center gap-2 shadow-xl"
@@ -132,6 +151,7 @@ const HeroSection = () => {
               <Link to="/register">
 
                 <motion.button
+                  type="button"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="px-8 py-4 rounded-full border-2 border-green-600 text-green-600 font-semibold"
@@ -145,18 +165,18 @@ const HeroSection = () => {
 
           </div>
 
-          {/* Right */}
-
           <div className="relative">
 
-            <motion.img
+            <motion.div
               whileHover={{ scale: 1.03 }}
-              src={HERO_IMAGE}
-              alt="Agriculture"
-              className="hero-image rounded-[40px] shadow-2xl w-full object-cover"
-            />
-
-            {/* Floating Card */}
+              className="hero-image"
+            >
+              <SafeImage
+                src={HERO_IMAGE}
+                alt="Fresh farm produce"
+                className="rounded-[40px] shadow-2xl w-full object-cover"
+              />
+            </motion.div>
 
             <motion.div
               whileHover={{ scale: 1.05 }}

@@ -29,7 +29,7 @@ const ProductActions = ({ product }) => {
   const [loading, setLoading] = useState(false);
 
   const increaseQuantity = () => {
-    if (quantity < product.stock) {
+    if (quantity < product.quantity) {
       setQuantity((prev) => prev + 1);
     }
   };

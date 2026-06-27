@@ -52,6 +52,7 @@ router.put(
   "/:id",
   protect,
   authorize("farmer"),
+  upload.array("images", 5),
   createProductValidator,
   validate,
   updateProduct

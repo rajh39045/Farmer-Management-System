@@ -3,7 +3,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ApiResponse from "../utils/ApiResponse.js";
 
 export const createCategory = asyncHandler(async (req, res) => {
-  const category = await categoryService.createCategory(req.body);
+  const category = await categoryService.createCategory(req.body, req.file);
 
   res.status(201).json(
     new ApiResponse(
@@ -21,7 +21,7 @@ export const getAllCategories = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Categories fetched successfully.",
-      categories
+      { categories }
     )
   );
 });
@@ -41,7 +41,8 @@ export const getCategoryById = asyncHandler(async (req, res) => {
 export const updateCategory = asyncHandler(async (req, res) => {
   const category = await categoryService.updateCategory(
     req.params.id,
-    req.body
+    req.body,
+    req.file
   );
 
   res.status(200).json(

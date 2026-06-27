@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-import { fadeUp } from "../../animations/framerVariants";
+import { fadeUp } from "../animations/framerVariants";
 import PrimaryButton from "./PrimaryButton";
+import { IMAGE_PLACEHOLDER } from "../utils/images";
 
 const EmptyState = ({
-  image = "https://illustrations.popsy.co/gray/searching.svg",
+  image = IMAGE_PLACEHOLDER,
   title = "No Data Found",
   description = "There is nothing to display right now.",
   buttonText,

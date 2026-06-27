@@ -9,6 +9,7 @@ import {
 
 import useCart from "../../hooks/useCart";
 import useWishlist from "../../hooks/useWishlist";
+import SafeImage from "../common/SafeImage";
 
 const ProductCard = ({ product }) => {
   const { addItemToCart } = useCart();
@@ -52,11 +53,8 @@ const ProductCard = ({ product }) => {
       <Link to={`/products/${product._id}`}>
         <div className="relative">
 
-          <img
-            src={
-              product.images?.[0]?.url ||
-              "https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=900&q=80"
-            }
+          <SafeImage
+            src={product.images?.[0]?.url}
             alt={product.name}
             className="
               w-full

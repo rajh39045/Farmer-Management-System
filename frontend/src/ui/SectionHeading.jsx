@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { fadeUp } from "../../animations/framerVariants";
+import { fadeUp } from "../animations/framerVariants";
 
 const SectionHeading = ({
   badge,

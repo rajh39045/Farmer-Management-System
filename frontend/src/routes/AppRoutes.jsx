@@ -9,6 +9,9 @@ import AuthLayout from "../layouts/AuthLayout";
 import Home from "../pages/public/Home";
 import Products from "../pages/public/Products";
 import ProductDetails from "../pages/public/ProductDetails";
+import PublicCategories from "../pages/public/Categories";
+import About from "../pages/public/About";
+import Contact from "../pages/public/Contact";
 
 // ===========================
 // Authentication Pages
@@ -43,6 +46,12 @@ import Categories from "../pages/admin/Categories";
 import Reports from "../pages/admin/Reports";
 import Users from "../pages/admin/Users";
 import VerifyFarmers from "../pages/admin/VerifyFarmers";
+import Settings from "../pages/settings/Settings";
+import Notifications from "../pages/customer/Notifications";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
+import Unauthorized from "../pages/errors/Unauthorized";
+import DashboardRedirect from "../pages/shared/DashboardRedirect";
 
 // ===========================
 // Middleware
@@ -75,10 +84,48 @@ const AppRoutes = () => {
           element={<ProductDetails />}
         />
 
+        <Route
+          path="/dashboard"
+          element={<DashboardRedirect />}
+        />
+
+        <Route
+          path="/categories"
+          element={<PublicCategories />}
+        />
+
+        <Route
+          path="/about"
+          element={<About />}
+        />
+
+        <Route
+          path="/contact"
+          element={<Contact />}
+        />
+
         {/* =======================
-            Customer Routes
+            Shared Authenticated Routes
         ======================== */}
         <Route element={<ProtectedRoute />}>
+          <Route
+            path="/profile"
+            element={<Profile />}
+          />
+
+          <Route
+            path="/notifications"
+            element={<Notifications />}
+          />
+
+          <Route
+            path="/settings"
+            element={<Settings />}
+          />
+
+          {/* =======================
+              Customer Routes
+          ======================== */}
           <Route element={<RoleRoute role="customer" />}>
             <Route
               path="/customer/dashboard"
@@ -103,11 +150,6 @@ const AppRoutes = () => {
             <Route
               path="/orders"
               element={<Orders />}
-            />
-
-            <Route
-              path="/profile"
-              element={<Profile />}
             />
           </Route>
         </Route>
@@ -190,7 +232,22 @@ const AppRoutes = () => {
           path="/register"
           element={<Register />}
         />
+
+        <Route
+          path="/forgot-password"
+          element={<ForgotPassword />}
+        />
+
+        <Route
+          path="/reset-password/:token"
+          element={<ResetPassword />}
+        />
       </Route>
+
+      <Route
+        path="/unauthorized"
+        element={<Unauthorized />}
+      />
 
       {/* =======================
           404 Page

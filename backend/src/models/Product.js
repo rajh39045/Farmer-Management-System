@@ -72,6 +72,11 @@ const productSchema = new mongoose.Schema(
       default: true,
     },
 
+    featured: {
+      type: Boolean,
+      default: false,
+    },
+
     averageRating: {
       type: Number,
       default: 0,

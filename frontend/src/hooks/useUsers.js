@@ -16,7 +16,7 @@ const useUsers = () => {
 
       const response = await getUsers();
 
-      setUsers(response.users || []);
+      setUsers(response?.users || []);
     } catch (error) {
       toast.error(
         error.response?.data?.message ||

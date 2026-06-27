@@ -2,11 +2,10 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
 import { getMyProducts } from "../api/productApi";
-import { getOrders } from "../api/orderApi";
+import { getFarmerOrders } from "../api/orderApi";
 
 const useFarmerDashboard = () => {
   const [loading, setLoading] = useState(true);
-
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
 
@@ -16,7 +15,7 @@ const useFarmerDashboard = () => {
 
       const [productsRes, ordersRes] = await Promise.all([
         getMyProducts(),
-        getOrders({ role: "farmer" }),
+        getFarmerOrders(),
       ]);
 
       setProducts(productsRes.products || []);
@@ -33,17 +32,27 @@ const useFarmerDashboard = () => {
 
   useEffect(() => {
     fetchDashboard();
+
+    const handleRefresh = () => {
+      fetchDashboard();
+    };
+
+    window.addEventListener("farmer-dashboard-refresh", handleRefresh);
+
+    return () => {
+      window.removeEventListener("farmer-dashboard-refresh", handleRefresh);
+    };
   }, [fetchDashboard]);
 
   const totalRevenue = useMemo(() => {
     return orders
-      .filter((o) => o.status === "Delivered")
-      .reduce((sum, order) => sum + order.totalAmount, 0);
+      .filter((o) => (o.orderStatus || o.status) === "Delivered")
+      .reduce((sum, order) => sum + Number(order.totalAmount || 0), 0);
   }, [orders]);
 
   const pendingOrders = useMemo(() => {
     return orders.filter(
-      (o) => o.status === "Pending"
+      (o) => (o.orderStatus || o.status) === "Pending"
     ).length;
   }, [orders]);
 

@@ -16,7 +16,7 @@ export const addToCart = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Product added to cart successfully.",
-      cart
+      { cart }
     )
   );
 });
@@ -29,7 +29,7 @@ export const getCart = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Cart fetched successfully.",
-      cart
+      { cart }
     )
   );
 });
@@ -48,7 +48,7 @@ export const updateCart = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Cart updated successfully.",
-      cart
+      { cart }
     )
   );
 });
@@ -64,7 +64,7 @@ export const removeCartItem = asyncHandler(async (req, res) => {
     new ApiResponse(
       200,
       "Product removed from cart successfully.",
-      cart
+      { cart }
     )
   );
 });

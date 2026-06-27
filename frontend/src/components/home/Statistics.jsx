@@ -82,6 +82,8 @@ const Statistics = () => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
+    if (!sectionRef.current) return;
+
     const ctx = gsap.context(() => {
       gsap.from(".stat-card", {
         scrollTrigger: {
@@ -93,7 +95,7 @@ const Statistics = () => {
         stagger: 0.2,
         duration: 1,
       });
-    }, sectionRef);
+    }, sectionRef.current);
 
     return () => ctx.revert();
   }, []);

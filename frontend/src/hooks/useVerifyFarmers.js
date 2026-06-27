@@ -2,38 +2,31 @@ import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import {
-  getUsers,
+  getPendingFarmers,
   verifyFarmer,
-} from "../api/userApi";
+} from "../api/adminApi";
 
 const useVerifyFarmers = () => {
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
+  const [farmers, setFarmers] = useState([]);
 
-  const [farmers, setFarmers] =
-    useState([]);
+  const fetchFarmers = useCallback(async () => {
+    try {
+      setLoading(true);
 
-  const fetchFarmers =
-    useCallback(async () => {
-      try {
-        setLoading(true);
+      const response = await getPendingFarmers();
 
-        const response =
-          await getUsers({
-            role: "farmer",
-          });
-
-        setFarmers(
-          response.users || []
-        );
-      } catch (error) {
-        toast.error(
-          "Unable to load farmers."
-        );
-      } finally {
-        setLoading(false);
-      }
-    }, []);
+      setFarmers(
+        Array.isArray(response)
+          ? response
+          : response?.farmers || []
+      );
+    } catch (error) {
+      toast.error("Unable to load farmers.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchFarmers();
@@ -41,17 +34,13 @@ const useVerifyFarmers = () => {
 
   const verify = async (id) => {
     try {
-      await verifyFarmer(id);
+      await verifyFarmer(id, "Approved");
 
-      toast.success(
-        "Farmer verified."
-      );
+      toast.success("Farmer verified.");
 
       fetchFarmers();
     } catch (error) {
-      toast.error(
-        "Verification failed."
-      );
+      toast.error("Verification failed.");
     }
   };
 

@@ -39,16 +39,20 @@ const VerifyFarmers = () => {
               <div>
 
                 <h2 className="font-bold">
-                  {farmer.name}
+                  {farmer.user?.fullName || farmer.farmName}
                 </h2>
 
                 <p className="text-gray-500">
-                  {farmer.email}
+                  {farmer.user?.email}
+                </p>
+
+                <p className="text-sm text-gray-400 mt-1">
+                  {farmer.farmLocation}, {farmer.district}
                 </p>
 
               </div>
 
-              {farmer.isVerified ? (
+              {farmer.verificationStatus === "Approved" ? (
 
                 <span className="text-green-600 font-semibold">
                   Verified

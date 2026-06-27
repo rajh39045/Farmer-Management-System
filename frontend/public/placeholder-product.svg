@@ -1,0 +1,10 @@
+<svg width="1200" height="900" viewBox="0 0 1200 900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="900" rx="48" fill="#F4F9F4"/>
+  <rect x="84" y="84" width="1032" height="732" rx="36" fill="#EAF6EA" stroke="#A8D5A1" stroke-width="6"/>
+  <path d="M240 620C240 530.5 310 460 400 460H800C890 460 960 530.5 960 620V720H240V620Z" fill="#6FBF73"/>
+  <circle cx="600" cy="356" r="152" fill="#CDECCF"/>
+  <path d="M420 330C420 250 480 190 560 190H640C720 190 780 250 780 330V370H420V330Z" fill="#4C8F4C"/>
+  <path d="M500 332C500 278.98 540.98 238 594 238H606C659.02 238 700 278.98 700 332V370H500V332Z" fill="#2F6A2F"/>
+  <rect x="310" y="720" width="580" height="56" rx="28" fill="#8BCB8A"/>
+  <text x="600" y="780" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="48" font-weight="700" fill="#2F6A2F">Fresh Produce</text>
+</svg>

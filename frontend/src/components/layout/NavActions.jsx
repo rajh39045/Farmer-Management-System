@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import useAuth from "../../hooks/useAuth";
@@ -6,7 +6,6 @@ import useCart from "../../hooks/useCart";
 import useWishlist from "../../hooks/useWishlist";
 
 import {
-  FaSearch,
   FaShoppingCart,
   FaHeart,
   FaBell,
@@ -15,51 +14,24 @@ import {
 } from "../../utils/icons";
 
 const NavActions = () => {
+  const navigate = useNavigate();
+
   const { user, logout, isAuthenticated } = useAuth();
 
   const { cart } = useCart();
 
   const { wishlist } = useWishlist();
 
+  const handleNotifications = () => {
+    if (isAuthenticated) {
+      navigate("/notifications");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
-    <div className="hidden lg:flex items-center gap-4">
-
-      {/* Search */}
-
-      <motion.div
-        whileHover={{ scale: 1.03 }}
-        className="relative"
-      >
-        <input
-          type="text"
-          placeholder="Search products..."
-          className="
-            w-64
-            pl-10
-            pr-4
-            py-2
-            rounded-full
-            border
-            border-gray-300
-            bg-white/80
-            backdrop-blur-md
-            focus:outline-none
-            focus:ring-2
-            focus:ring-green-500
-            transition-all
-          "
-        />
-
-        <FaSearch
-          className="
-            absolute
-            left-4
-            top-1/2
-            -translate-y-1/2
-            text-gray-500
-          "
-        />
-      </motion.div>
+    <div className="hidden lg:flex items-center gap-3">
 
       {/* Wishlist */}
 
@@ -155,6 +127,7 @@ const NavActions = () => {
           rotate: 10,
         }}
         className="cursor-pointer"
+        onClick={handleNotifications}
       >
         <FaBell
           className="
@@ -172,7 +145,7 @@ const NavActions = () => {
         <div className="flex items-center gap-3">
 
           <Link
-            to="/profile"
+            to="/dashboard"
             className="
               flex
               items-center

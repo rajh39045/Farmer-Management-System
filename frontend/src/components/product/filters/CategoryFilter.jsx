@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
 import { fadeUp } from "../../../animations/framerVariants";
+import { getCategoryKey } from "../../../utils/categories";
 
 const CategoryFilter = ({
   categories = [],
   selectedCategory,
   setSelectedCategory,
 }) => {
+  const activeCategory = selectedCategory?.toString() || "";
+
   return (
     <motion.div
       variants={fadeUp}
@@ -31,7 +34,7 @@ const CategoryFilter = ({
           <input
             type="radio"
             name="category"
-            checked={!selectedCategory}
+            checked={!activeCategory}
             onChange={() =>
               setSelectedCategory("")
             }
@@ -49,40 +52,45 @@ const CategoryFilter = ({
 
         {/* Dynamic Categories */}
 
-        {categories.map((category) => (
-          <label
-            key={category._id}
-            className="
-              flex
-              items-center
-              gap-3
-              cursor-pointer
-              hover:text-green-600
-              transition
-            "
-          >
-            <input
-              type="radio"
-              name="category"
-              checked={
-                selectedCategory === category._id
-              }
-              onChange={() =>
-                setSelectedCategory(category._id)
-              }
+        {categories.map((category) => {
+          const categoryId = category._id?.toString() || category.slug || "";
+
+          return (
+            <label
+              key={getCategoryKey(category)}
               className="
-                w-4
-                h-4
-                accent-green-600
+                flex
+                items-center
+                gap-3
+                cursor-pointer
+                hover:text-green-600
+                transition
               "
-            />
+            >
+              <input
+                type="radio"
+                name="category"
+                checked={activeCategory === categoryId}
+                onChange={() =>
+                  setSelectedCategory(categoryId)
+                }
+                className="
+                  w-4
+                  h-4
+                  accent-green-600
+                "
+              />
 
-            <span>
-              {category.name}
-            </span>
+              <span>
+                {category.name}
+                {category.productCount > 0
+                  ? ` (${category.productCount})`
+                  : ""}
+              </span>
 
-          </label>
-        ))}
+            </label>
+          );
+        })}
 
       </div>
     </motion.div>

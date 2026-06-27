@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import {
   FaSearch,
   IoClose,
-} from "../../utils/icons";
+} from "../utils/icons";
 
 const SearchInput = ({
   value,

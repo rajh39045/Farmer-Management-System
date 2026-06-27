@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { getAllProducts } from "../api/productApi";
 import { getAllCategories } from "../api/categoryApi";
+import { normalizeCategories } from "../utils/categories";
 
 const initialFilters = {
   category: "",
@@ -12,6 +14,8 @@ const initialFilters = {
 };
 
 const useProducts = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
 
@@ -21,16 +25,21 @@ const useProducts = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const [search, setSearch] = useState("");
+  const [search, setSearchState] = useState(
+    () => searchParams.get("search") || ""
+  );
   const [sort, setSort] = useState("newest");
 
-  const [filters, setFilters] = useState(initialFilters);
+  const [filters, setFiltersState] = useState(() => ({
+    ...initialFilters,
+    category: searchParams.get("category") || "",
+  }));
 
   const fetchCategories = useCallback(async () => {
     try {
       const response = await getAllCategories();
 
-      setCategories(response.categories || []);
+      setCategories(normalizeCategories(response.categories || []));
     } catch (err) {
       console.error(err);
     }
@@ -82,11 +91,64 @@ const useProducts = () => {
     fetchProducts();
   }, [fetchProducts]);
 
+  useEffect(() => {
+    const categoryFromUrl = searchParams.get("category") || "";
+    const searchFromUrl = searchParams.get("search") || "";
+
+    setFiltersState((prev) => {
+      if (prev.category === categoryFromUrl) {
+        return prev;
+      }
+
+      return {
+        ...prev,
+        category: categoryFromUrl,
+      };
+    });
+
+    setSearchState((prev) =>
+      prev === searchFromUrl ? prev : searchFromUrl
+    );
+
+    if (categoryFromUrl || searchFromUrl) {
+      setPage(1);
+    }
+  }, [searchParams]);
+
+  const updateSearchParams = (updates) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+
+      Object.entries(updates).forEach(([key, value]) => {
+        if (value) {
+          next.set(key, value);
+        } else {
+          next.delete(key);
+        }
+      });
+
+      return next;
+    }, { replace: true });
+  };
+
+  const setSearch = (value) => {
+    setSearchState(value);
+    updateSearchParams({ search: value });
+    setPage(1);
+  };
+
+  const setFilters = (nextFilters) => {
+    setFiltersState(nextFilters);
+    updateSearchParams({ category: nextFilters.category });
+    setPage(1);
+  };
+
   const resetFilters = () => {
-    setFilters(initialFilters);
-    setSearch("");
+    setFiltersState(initialFilters);
+    setSearchState("");
     setSort("newest");
     setPage(1);
+    setSearchParams({}, { replace: true });
   };
 
   return {

@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 
-import { fadeUp } from "../../animations/framerVariants";
+import { fadeUp } from "../animations/framerVariants";
 import PrimaryButton from "./PrimaryButton";
 
 const EmptyState = ({

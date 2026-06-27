@@ -9,24 +9,29 @@ import {
   clearCart,
 } from "../api/cartApi";
 
+import useAuth from "../hooks/useAuth";
+
 export const CartContext = createContext();
 
 const CartProvider = ({ children }) => {
+  const { isAuthenticated, user } = useAuth();
+
   const [cart, setCart] = useState([]);
 
   const [loading, setLoading] = useState(false);
 
-  // ============================
-  // Fetch Cart
-  // ============================
-
   const fetchCart = async () => {
+    if (!isAuthenticated || user?.role !== "customer") {
+      setCart([]);
+      return;
+    }
+
     try {
       setLoading(true);
 
       const data = await getCart();
 
-      setCart(data.cart || []);
+      setCart(data?.cart?.items || []);
     } catch (error) {
       console.error(error);
     } finally {
@@ -34,17 +39,13 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // ============================
-  // Add To Cart
-  // ============================
-
   const addItemToCart = async (cartData) => {
     try {
       setLoading(true);
 
       const data = await addToCart(cartData);
 
-      setCart(data.cart || []);
+      setCart(data?.cart?.items || []);
 
       toast.success("Product added to cart");
 
@@ -63,17 +64,13 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // ============================
-  // Update Quantity
-  // ============================
-
   const updateItemQuantity = async (cartData) => {
     try {
       setLoading(true);
 
       const data = await updateCart(cartData);
 
-      setCart(data.cart || []);
+      setCart(data?.cart?.items || []);
 
       toast.success("Cart updated");
 
@@ -92,17 +89,13 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // ============================
-  // Remove Item
-  // ============================
-
   const removeItem = async (productId) => {
     try {
       setLoading(true);
 
       const data = await removeCartItem(productId);
 
-      setCart(data.cart || []);
+      setCart(data?.cart?.items || []);
 
       toast.success("Item removed");
 
@@ -121,21 +114,15 @@ const CartProvider = ({ children }) => {
     }
   };
 
-  // ============================
-  // Clear Cart
-  // ============================
-
   const emptyCart = async () => {
     try {
       setLoading(true);
 
-      const data = await clearCart();
+      await clearCart();
 
       setCart([]);
 
       toast.success("Cart cleared");
-
-      return data;
     } catch (error) {
       console.error(error);
 
@@ -152,7 +139,7 @@ const CartProvider = ({ children }) => {
 
   useEffect(() => {
     fetchCart();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <CartContext.Provider

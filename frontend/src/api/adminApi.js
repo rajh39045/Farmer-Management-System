@@ -1,10 +1,5 @@
 import api from "./axios";
 
-/**
- * ===========================================
- * Admin Dashboard
- * ===========================================
- */
 export const getAdminDashboard = async () => {
   const response = await api.get(
     "/admin/dashboard"
@@ -13,11 +8,6 @@ export const getAdminDashboard = async () => {
   return response.data;
 };
 
-/**
- * ===========================================
- * Get Pending Farmers
- * ===========================================
- */
 export const getPendingFarmers = async () => {
   const response = await api.get(
     "/admin/farmers/pending"
@@ -26,14 +16,13 @@ export const getPendingFarmers = async () => {
   return response.data;
 };
 
-/**
- * ===========================================
- * Verify Farmer
- * ===========================================
- */
-export const verifyFarmer = async (farmerId) => {
+export const verifyFarmer = async (
+  farmerId,
+  status = "Approved"
+) => {
   const response = await api.patch(
-    `/admin/farmers/${farmerId}/verify`
+    `/admin/farmers/${farmerId}/verify`,
+    { status }
   );
 
   return response.data;

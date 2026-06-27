@@ -9,6 +9,7 @@ import {
   FaAward,
 } from "../../utils/icons";
 
+import SafeImage from "../common/SafeImage";
 import { FARMER_IMAGE } from "../../utils/images";
 
 const features = [
@@ -46,6 +47,8 @@ const WhyChooseUs = () => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
+    if (!sectionRef.current) return;
+
     const ctx = gsap.context(() => {
       gsap.from(".why-card", {
         opacity: 0,
@@ -59,7 +62,7 @@ const WhyChooseUs = () => {
         opacity: 0,
         duration: 1.2,
       });
-    }, sectionRef);
+    }, sectionRef.current);
 
     return () => ctx.revert();
   }, []);
@@ -72,8 +75,6 @@ const WhyChooseUs = () => {
       <div className="max-w-7xl mx-auto px-6">
 
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-          {/* Left */}
 
           <div>
 
@@ -140,21 +141,20 @@ const WhyChooseUs = () => {
 
           </div>
 
-          {/* Right */}
-
           <motion.div
             whileHover={{
               scale: 1.03,
             }}
+            className="farmer-image"
           >
-            <img
+            <SafeImage
               src={FARMER_IMAGE}
-              alt="Farmer"
+              alt="Farmer working in the field"
               className="
-                farmer-image
                 rounded-[40px]
                 shadow-2xl
                 w-full
+                object-cover
               "
             />
           </motion.div>

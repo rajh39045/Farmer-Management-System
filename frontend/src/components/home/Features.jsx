@@ -44,6 +44,8 @@ const Features = () => {
   const sectionRef = useRef(null);
 
   useEffect(() => {
+    if (!sectionRef.current) return;
+
     const ctx = gsap.context(() => {
       gsap.from(".feature-card", {
         y: 60,
@@ -52,7 +54,7 @@ const Features = () => {
         duration: 1,
         ease: "power3.out",
       });
-    }, sectionRef);
+    }, sectionRef.current);
 
     return () => ctx.revert();
   }, []);

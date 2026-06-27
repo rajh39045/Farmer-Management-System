@@ -29,7 +29,7 @@ const useProductDetails = () => {
 
       const response = await getProductById(id);
 
-      const productData = response.product;
+      const productData = response.product || response;
 
       setProduct(productData);
 
@@ -59,7 +59,11 @@ const useProductDetails = () => {
       const response =
         await getProductReviews(id);
 
-      setReviews(response.reviews || []);
+      setReviews(
+        Array.isArray(response)
+          ? response
+          : response.reviews || []
+      );
     } catch (err) {
       console.error(err);
     }

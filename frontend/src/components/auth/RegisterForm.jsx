@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import AuthHeader from "./AuthHeader";
@@ -11,6 +11,7 @@ import useAuth from "../../hooks/useAuth";
 
 const RegisterForm = () => {
   const { register } = useAuth();
+  const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
 
@@ -52,6 +53,8 @@ const RegisterForm = () => {
       });
 
       toast.success("Registration successful.");
+
+      navigate("/login");
 
     } catch (err) {
       toast.error(

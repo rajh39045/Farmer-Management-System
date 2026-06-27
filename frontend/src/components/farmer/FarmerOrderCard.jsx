@@ -4,6 +4,8 @@ const FarmerOrderCard = ({
   order,
   onStatusChange,
 }) => {
+  const status = order.orderStatus || order.status;
+
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
 
@@ -16,13 +18,13 @@ const FarmerOrderCard = ({
           </h2>
 
           <p className="text-gray-500 mt-2">
-            Customer : {order.customer?.name}
+            Customer : {order.customer?.fullName || order.customer?.name}
           </p>
 
         </div>
 
         <OrderStatus
-          status={order.status}
+          status={status}
         />
 
       </div>
@@ -31,11 +33,11 @@ const FarmerOrderCard = ({
 
         {order.items.map((item) => (
           <div
-            key={item.product._id}
+            key={item._id || item.product?._id || item.name}
             className="flex justify-between"
           >
             <span>
-              {item.product.name}
+              {item.name || item.product?.name}
             </span>
 
             <span>
@@ -44,6 +46,7 @@ const FarmerOrderCard = ({
             </span>
 
           </div>
+
         ))}
 
       </div>
@@ -66,24 +69,24 @@ const FarmerOrderCard = ({
           onClick={() =>
             onStatusChange(
               order._id,
-              "Packed"
+              "Preparing"
             )
           }
           className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
         >
-          Packed
+          Preparing
         </button>
 
         <button
           onClick={() =>
             onStatusChange(
               order._id,
-              "Shipped"
+              "Out for Delivery"
             )
           }
           className="px-4 py-2 bg-indigo-500 text-white rounded-lg"
         >
-          Shipped
+          Out for Delivery
         </button>
 
         <button

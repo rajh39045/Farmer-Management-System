@@ -1,38 +1,64 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import toast from "react-hot-toast";
 
-import { getUsers } from "../api/userApi";
+import { getAdminDashboard } from "../api/adminApi";
 import { getOrders } from "../api/orderApi";
-import { getAllProducts } from "../api/productApi";
+
+const normalizeOrders = (payload) => {
+  if (Array.isArray(payload)) {
+    return payload;
+  }
+
+  if (payload && typeof payload === "object") {
+    if (Array.isArray(payload.orders)) {
+      return payload.orders;
+    }
+
+    if (Array.isArray(payload.data)) {
+      return payload.data;
+    }
+  }
+
+  return [];
+};
 
 const useAdminDashboard = () => {
   const [loading, setLoading] = useState(true);
-
-  const [users, setUsers] = useState([]);
+  const [stats, setStats] = useState({
+    totalUsers: 0,
+    totalProducts: 0,
+    totalOrders: 0,
+    totalRevenue: 0,
+    pendingFarmers: 0,
+  });
   const [orders, setOrders] = useState([]);
-  const [products, setProducts] = useState([]);
 
   const fetchDashboard = useCallback(async () => {
     try {
       setLoading(true);
 
-      const [
-        usersRes,
-        ordersRes,
-        productsRes,
-      ] = await Promise.all([
-        getUsers(),
-        getOrders(),
-        getAllProducts(),
+      const [statsRes, ordersRes] = await Promise.allSettled([
+        getAdminDashboard(),
+        getOrders({ role: "admin" }),
       ]);
 
-      setUsers(usersRes.users || []);
-      setOrders(ordersRes.orders || []);
-      setProducts(productsRes.products || []);
+      if (statsRes.status === "fulfilled") {
+        setStats({
+          totalUsers: statsRes.value?.totalUsers || 0,
+          totalProducts: statsRes.value?.totalProducts || 0,
+          totalOrders: statsRes.value?.totalOrders || 0,
+          totalRevenue: statsRes.value?.totalRevenue || 0,
+          pendingFarmers: statsRes.value?.pendingFarmers || 0,
+        });
+      }
+
+      if (ordersRes.status === "fulfilled") {
+        setOrders(normalizeOrders(ordersRes.value));
+      }
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-        "Unable to load dashboard."
+        error?.response?.data?.message ||
+          "Unable to load dashboard."
       );
     } finally {
       setLoading(false);
@@ -44,27 +70,19 @@ const useAdminDashboard = () => {
   }, [fetchDashboard]);
 
   const totalRevenue = useMemo(() => {
-    return orders
-      .filter(order => order.status === "Delivered")
-      .reduce(
-        (sum, order) => sum + order.totalAmount,
-        0
-      );
-  }, [orders]);
+    return stats?.totalRevenue || 0;
+  }, [stats]);
 
   const pendingFarmers = useMemo(() => {
-    return users.filter(
-      user =>
-        user.role === "farmer" &&
-        !user.isVerified
-    ).length;
-  }, [users]);
+    return stats?.pendingFarmers || 0;
+  }, [stats]);
 
   return {
     loading,
-    users,
+    stats,
+    users: [],
     orders,
-    products,
+    products: [],
     totalRevenue,
     pendingFarmers,
     refreshDashboard: fetchDashboard,

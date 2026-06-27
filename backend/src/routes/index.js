@@ -13,6 +13,7 @@ import dashboardRoutes from "./dashboard.routes.js";
 import customerDashboardRoutes from "./customerDashboard.routes.js";
 import wishlistRoutes from "./wishlist.routes.js";
 import notificationRoutes from "./notification.routes.js";
+import settingsRoutes from "./settings.routes.js";
 
 const router = Router();
 
@@ -52,6 +53,8 @@ router.use(
 router.use("/wishlist", wishlistRoutes);
 
 router.use("/notifications", notificationRoutes);
+
+router.use("/settings", settingsRoutes);
 
 
 export default router;

@@ -2,6 +2,7 @@ import User from "../models/User.js";
 import Product from "../models/Product.js";
 import Order from "../models/Order.js";
 import FarmerProfile from "../models/FarmerProfile.js";
+import ApiError from "../utils/ApiError.js";
 
 class AdminService {
   // Dashboard Statistics
@@ -58,10 +59,16 @@ class AdminService {
     const farmer = await FarmerProfile.findById(id);
 
     if (!farmer) {
-      throw new Error("Farmer not found.");
+      throw new ApiError(404, "Farmer not found.");
     }
 
     farmer.verificationStatus = status;
+
+    if (status === "Approved") {
+      await User.findByIdAndUpdate(farmer.user, {
+        isVerified: true,
+      });
+    }
 
     await farmer.save();
 

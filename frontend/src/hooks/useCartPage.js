@@ -18,8 +18,9 @@ const useCartPage = () => {
       setLoading(true);
 
       const response = await getCart();
+      const items = response?.cart?.items || response?.items || [];
 
-      setCartItems(response.cart?.items || []);
+      setCartItems(items);
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
@@ -37,14 +38,14 @@ const useCartPage = () => {
   const increaseQuantity = async (productId) => {
     try {
       const item = cartItems.find(
-        (i) => i.product._id === productId
+        (i) => i?.product?._id === productId
       );
 
       if (!item) return;
 
       await updateCartItem({
         productId,
-        quantity: item.quantity + 1,
+        quantity: Number(item?.quantity || 0) + 1,
       });
 
       fetchCart();
@@ -56,19 +57,19 @@ const useCartPage = () => {
   const decreaseQuantity = async (productId) => {
     try {
       const item = cartItems.find(
-        (i) => i.product._id === productId
+        (i) => i?.product?._id === productId
       );
 
       if (!item) return;
 
-      if (item.quantity === 1) {
+      if (Number(item?.quantity || 0) === 1) {
         removeItem(productId);
         return;
       }
 
       await updateCartItem({
         productId,
-        quantity: item.quantity - 1,
+        quantity: Number(item?.quantity || 0) - 1,
       });
 
       fetchCart();
@@ -106,12 +107,12 @@ const useCartPage = () => {
   };
 
   const subtotal = useMemo(() => {
-    return cartItems.reduce(
-      (total, item) =>
-        total +
-        item.product.price * item.quantity,
-      0
-    );
+    return cartItems.reduce((total, item) => {
+      const price = Number(item?.product?.price || 0);
+      const quantity = Number(item?.quantity || 0);
+
+      return total + price * quantity;
+    }, 0);
   }, [cartItems]);
 
   const deliveryCharge =

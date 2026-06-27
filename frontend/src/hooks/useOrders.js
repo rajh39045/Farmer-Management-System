@@ -38,6 +38,7 @@ const useOrders = () => {
       toast.success("Order cancelled.");
 
       fetchOrders();
+      window.dispatchEvent(new Event("customer-dashboard-refresh"));
     } catch (error) {
       toast.error(
         error.response?.data?.message ||

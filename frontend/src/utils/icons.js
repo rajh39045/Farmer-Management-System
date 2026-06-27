@@ -1,7 +1,3 @@
-// ============================
-// Navbar Icons
-// ============================
-
 export {
   FaLeaf,
   FaBars,
@@ -13,11 +9,44 @@ export {
   FaBell,
   FaSignOutAlt,
   FaUser,
+  FaMinus,
+  FaPlus,
+  FaTrash,
+  FaUsers,
+  FaBox,
+  FaRupeeSign,
+  FaUserCheck,
+  FaBolt,
+  FaEdit,
+  FaShoppingBasket,
+  FaClock,
+  FaCheckCircle,
+  FaShoppingBag,
+  FaTruck,
+  FaTag,
+  FaMoneyBillWave,
+  FaCreditCard,
+  FaUniversity,
+  FaHeartBroken,
+  FaArrowRight,
+  FaEye,
+  FaEyeSlash,
+  FaStar,
+  FaUndoAlt,
+  FaMapMarkerAlt,
+  FaPhone,
+  FaEnvelope,
+  FaFacebook,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedin,
+  FaSeedling,
+  FaAward,
+  FaBoxOpen,
+  FaCalendarAlt,
+  FaPen,
+  FaThumbsUp,
 } from "react-icons/fa";
-
-// ============================
-// Dashboard Icons
-// ============================
 
 export {
   MdDashboard,
@@ -29,27 +58,15 @@ export {
   MdSettings,
 } from "react-icons/md";
 
-// ============================
-// Analytics Icons
-// ============================
-
 export {
   HiOutlineChartBar,
   HiOutlineUsers,
 } from "react-icons/hi";
 
-// ============================
-// Farmer Icons
-// ============================
-
 export {
   GiFarmer,
   GiWheat,
 } from "react-icons/gi";
-
-// ============================
-// Misc Icons
-// ============================
 
 export {
   IoClose,

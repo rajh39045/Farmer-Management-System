@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import {
-  getOrders,
+  getFarmerOrders,
   updateOrderStatus,
 } from "../api/orderApi";
 
@@ -14,9 +14,7 @@ const useFarmerOrders = () => {
     try {
       setLoading(true);
 
-      const response = await getOrders({
-        role: "farmer",
-      });
+      const response = await getFarmerOrders();
 
       setOrders(response.orders || []);
     } catch (error) {
@@ -33,18 +31,13 @@ const useFarmerOrders = () => {
     fetchOrders();
   }, [fetchOrders]);
 
-  const changeStatus = async (
-    orderId,
-    status
-  ) => {
+  const changeStatus = async (orderId, status) => {
     try {
       await updateOrderStatus(orderId, {
         status,
       });
 
-      toast.success(
-        "Order updated successfully."
-      );
+      toast.success("Order updated successfully.");
 
       fetchOrders();
     } catch (error) {

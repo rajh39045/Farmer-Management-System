@@ -12,8 +12,7 @@ import LoadingSpinner from "../../components/ui/LoadingSpinner";
 const Reports = () => {
   const {
     loading,
-    users,
-    products,
+    stats,
     orders,
     totalRevenue,
   } = useAdminDashboard();
@@ -28,11 +27,11 @@ const Reports = () => {
   }
 
   const delivered = orders.filter(
-    (o) => o.status === "Delivered"
+    (o) => (o.orderStatus || o.status) === "Delivered"
   ).length;
 
   const pending = orders.filter(
-    (o) => o.status === "Pending"
+    (o) => (o.orderStatus || o.status) === "Pending"
   ).length;
 
   return (
@@ -60,7 +59,7 @@ const Reports = () => {
                   Users
                 </span>
 
-                <strong>{users.length}</strong>
+                <strong>{stats?.totalUsers || 0}</strong>
               </div>
 
               <div className="flex justify-between">
@@ -69,7 +68,7 @@ const Reports = () => {
                   Products
                 </span>
 
-                <strong>{products.length}</strong>
+                <strong>{stats?.totalProducts || 0}</strong>
               </div>
 
               <div className="flex justify-between">
@@ -78,7 +77,7 @@ const Reports = () => {
                   Orders
                 </span>
 
-                <strong>{orders.length}</strong>
+                <strong>{stats?.totalOrders || orders.length}</strong>
               </div>
 
               <div className="flex justify-between">
@@ -123,15 +122,15 @@ const Reports = () => {
             <ul className="space-y-4 text-gray-600">
 
               <li>
-                ✔ Total Registered Users : {users.length}
+                ✔ Total Registered Users : {stats?.totalUsers || 0}
               </li>
 
               <li>
-                ✔ Active Products : {products.length}
+                ✔ Active Products : {stats?.totalProducts || 0}
               </li>
 
               <li>
-                ✔ Orders Received : {orders.length}
+                ✔ Orders Received : {stats?.totalOrders || orders.length}
               </li>
 
               <li>

@@ -1,41 +1,37 @@
 import { Link } from "react-router-dom";
-import {
-  FaEdit,
-  FaTrash,
-} from "../../utils/icons";
+import { FaEdit, FaTrash } from "../../utils/icons";
 
-const ProductCard = ({
-  product,
-  onDelete,
-}) => {
+const ProductCard = ({ product, onDelete }) => {
   return (
-    <div className="bg-white rounded-2xl shadow-md overflow-hidden">
-
+    <div className="overflow-hidden rounded-2xl bg-white shadow-md">
       <img
-        src={
-          product.images?.[0]?.url ||
-          "https://via.placeholder.com/400"
-        }
+        src={product.images?.[0]?.url || "/placeholder-product.svg"}
         alt={product.name}
-        className="w-full h-56 object-cover"
+        className="h-56 w-full object-cover"
       />
 
       <div className="p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-xl font-semibold">{product.name}</h2>
+            <p className="mt-2 text-gray-500">
+              {product.category?.name || "Uncategorized"}
+            </p>
+          </div>
+          <span className={`rounded-full px-3 py-1 text-xs font-semibold ${product.isAvailable === false ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+            {product.isAvailable === false ? "Inactive" : "Active"}
+          </span>
+        </div>
 
-        <h2 className="text-xl font-semibold">
-          {product.name}
-        </h2>
+        <div className="mt-4 space-y-2 text-sm text-gray-600">
+          <p>Price: ₹{product.price}</p>
+          <p>Quantity: {product.quantity} {product.unit}</p>
+          <p>Method: {product.farmingMethod || (product.organic ? "Organic" : "Conventional")}</p>
+        </div>
 
-        <p className="text-gray-500 mt-2">
-          {product.category?.name}
-        </p>
+        <h3 className="mt-4 text-2xl font-bold text-green-600">₹{product.price}</h3>
 
-        <h3 className="text-2xl text-green-600 font-bold mt-4">
-          ₹{product.price}
-        </h3>
-
-        <div className="flex justify-between items-center mt-6">
-
+        <div className="mt-6 flex items-center justify-between">
           <Link
             to={`/farmer/products/edit/${product._id}`}
             className="flex items-center gap-2 text-blue-600"
@@ -45,19 +41,14 @@ const ProductCard = ({
           </Link>
 
           <button
-            onClick={() =>
-              onDelete(product._id)
-            }
+            onClick={() => onDelete(product._id)}
             className="flex items-center gap-2 text-red-600"
           >
             <FaTrash />
             Delete
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 };

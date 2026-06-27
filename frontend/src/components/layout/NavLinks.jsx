@@ -7,6 +7,10 @@ const navItems = [
     path: "/",
   },
   {
+    name: "Dashboard",
+    path: "/dashboard",
+  },
+  {
     name: "Products",
     path: "/products",
   },
@@ -53,7 +57,7 @@ const NavLinks = () => {
                 {isActive && (
                   <motion.div
                     layoutId="navbar-indicator"
-                    className="absolute left-0 -bottom-2 h-[3px] w-full rounded-full bg-green-600"
+                    className="absolute left-0 -bottom-2 h-0.75 w-full rounded-full bg-green-600"
                     transition={{
                       type: "spring",
                       stiffness: 500,

@@ -39,49 +39,58 @@ const UserTable = ({
 
         <tbody>
 
-          {users.map((user) => (
-
-            <tr
-              key={user._id}
-              className="border-b"
-            >
-
-              <td className="p-4">
-                {user.name}
+          {users.length === 0 ? (
+            <tr>
+              <td
+                colSpan="5"
+                className="p-6 text-center text-gray-500"
+              >
+                No users found.
               </td>
-
-              <td className="p-4">
-                {user.email}
-              </td>
-
-              <td className="p-4 capitalize">
-                {user.role}
-              </td>
-
-              <td className="p-4">
-
-                {user.isVerified
-                  ? "Yes"
-                  : "No"}
-
-              </td>
-
-              <td className="p-4 text-center">
-
-                <button
-                  onClick={() =>
-                    onDelete(user._id)
-                  }
-                  className="text-red-500"
-                >
-                  <FaTrash />
-                </button>
-
-              </td>
-
             </tr>
+          ) : (
+            users.map((user) => (
+              <tr
+                key={user._id}
+                className="border-b"
+              >
 
-          ))}
+                <td className="p-4">
+                  {user.fullName || user.name || "Unknown user"}
+                </td>
+
+                <td className="p-4">
+                  {user.email}
+                </td>
+
+                <td className="p-4 capitalize">
+                  {user.role}
+                </td>
+
+                <td className="p-4">
+
+                  {user.isVerified
+                    ? "Yes"
+                    : "No"}
+
+                </td>
+
+                <td className="p-4 text-center">
+
+                  <button
+                    onClick={() =>
+                      onDelete(user._id)
+                    }
+                    className="text-red-500"
+                  >
+                    <FaTrash />
+                  </button>
+
+                </td>
+
+              </tr>
+            ))
+          )}
 
         </tbody>
 

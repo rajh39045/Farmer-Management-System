@@ -9,10 +9,19 @@ import {
 
 const ProductSidebar = ({
   categories,
-  filters,
+  filters = {},
   setFilters,
   resetFilters,
 }) => {
+  const effectiveFilters = {
+    category: "",
+    minPrice: "",
+    maxPrice: "",
+    rating: "",
+    inStock: "",
+    ...filters,
+  };
+
   return (
     <motion.aside
       variants={fadeUp}
@@ -34,8 +43,29 @@ const ProductSidebar = ({
 
         <ProductFilters
           categories={categories}
-          filters={filters}
-          setFilters={setFilters}
+          selectedCategory={effectiveFilters.category}
+          setSelectedCategory={(category) =>
+            setFilters({ ...effectiveFilters, category })
+          }
+          priceRange={{
+            min: effectiveFilters.minPrice,
+            max: effectiveFilters.maxPrice,
+          }}
+          setPriceRange={(priceRange) =>
+            setFilters({
+              ...effectiveFilters,
+              minPrice: priceRange.min,
+              maxPrice: priceRange.max,
+            })
+          }
+          rating={effectiveFilters.rating}
+          setRating={(rating) =>
+            setFilters({ ...effectiveFilters, rating })
+          }
+          inStock={effectiveFilters.inStock}
+          setInStock={(inStock) =>
+            setFilters({ ...effectiveFilters, inStock })
+          }
           resetFilters={resetFilters}
         />
 

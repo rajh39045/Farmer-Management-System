@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { fadeUp } from "../../../animations/framerVariants";
 
 const PriceFilter = ({
-  priceRange,
+  priceRange = { min: "", max: "" },
   setPriceRange,
 }) => {
   const handleMinChange = (e) => {
@@ -40,7 +40,7 @@ const PriceFilter = ({
             type="number"
             min="0"
             placeholder="₹ 0"
-            value={priceRange.min}
+            value={priceRange.min || ""}
             onChange={handleMinChange}
             className="
               w-full
@@ -66,7 +66,7 @@ const PriceFilter = ({
             type="number"
             min="0"
             placeholder="₹ 5000"
-            value={priceRange.max}
+            value={priceRange.max || ""}
             onChange={handleMaxChange}
             className="
               w-full

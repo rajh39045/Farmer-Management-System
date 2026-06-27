@@ -10,6 +10,25 @@ class OrderService {
   // Place Order
   // ==========================================
   async placeOrder(userId, orderData) {
+    const deliveryAddress =
+      orderData.deliveryAddress ||
+      (orderData.shippingAddress
+        ? [
+            orderData.shippingAddress.fullName,
+            orderData.shippingAddress.address,
+            orderData.shippingAddress.city,
+            orderData.shippingAddress.state,
+            orderData.shippingAddress.pincode,
+          ]
+            .filter(Boolean)
+            .join(", ")
+        : null);
+
+    const deliverySlot =
+      orderData.deliverySlot ||
+      orderData.shippingAddress?.deliverySlot ||
+      "Morning";
+
     const cart = await Cart.findOne({
       customer: userId,
     }).populate("items.product");
@@ -65,9 +84,9 @@ class OrderService {
       farmer: farmerId,
       items,
       totalAmount,
-      deliveryAddress: orderData.deliveryAddress,
-      deliverySlot: orderData.deliverySlot,
-      paymentMethod: orderData.paymentMethod,
+      deliveryAddress,
+      deliverySlot,
+      paymentMethod: orderData.paymentMethod || "COD",
     });
 
     // Notify Farmer
@@ -111,7 +130,8 @@ class OrderService {
         createdAt: -1,
       });
   }
-    // ==========================================
+
+  // ==========================================
   // Get Farmer Orders
   // ==========================================
   async getFarmerOrders(userId) {
@@ -122,6 +142,100 @@ class OrderService {
       .sort({
         createdAt: -1,
       });
+  }
+
+  // ==========================================
+  // Get All Orders (Admin)
+  // ==========================================
+  async getAllOrders() {
+    const orders = await Order.find()
+      .populate("customer", "fullName email phone")
+      .populate("farmer", "fullName phone")
+      .sort({ createdAt: -1 });
+
+    return { orders };
+  }
+
+  // ==========================================
+  // Get Order By ID
+  // ==========================================
+  async getOrderById(orderId, userId, role) {
+    const order = await Order.findById(orderId)
+      .populate("customer", "fullName email phone")
+      .populate("farmer", "fullName phone");
+
+    if (!order) {
+      throw new ApiError(404, "Order not found.");
+    }
+
+    const isCustomer =
+      order.customer._id.toString() === userId.toString();
+    const isFarmer =
+      order.farmer._id.toString() === userId.toString();
+    const isAdmin = role === "admin";
+
+    if (!isCustomer && !isFarmer && !isAdmin) {
+      throw new ApiError(
+        403,
+        "You are not authorized to view this order."
+      );
+    }
+
+    return order;
+  }
+
+  // ==========================================
+  // Cancel Order (Customer)
+  // ==========================================
+  async cancelOrder(orderId, userId) {
+    const order = await Order.findById(orderId);
+
+    if (!order) {
+      throw new ApiError(404, "Order not found.");
+    }
+
+    if (order.customer.toString() !== userId.toString()) {
+      throw new ApiError(
+        403,
+        "You are not authorized to cancel this order."
+      );
+    }
+
+    if (order.orderStatus !== "Pending") {
+      throw new ApiError(
+        400,
+        "Only pending orders can be cancelled."
+      );
+    }
+
+    order.orderStatus = "Cancelled";
+
+    await order.save();
+
+    await notificationService.createNotification({
+      recipient: order.farmer,
+      sender: userId,
+      type: NOTIFICATION_TYPES.ORDER_CANCELLED,
+      title: "Order Cancelled",
+      message: "A customer has cancelled their order.",
+      reference: order._id,
+      referenceModel: "Order",
+    });
+
+    return order;
+  }
+
+  // ==========================================
+  // Delete Order (Admin)
+  // ==========================================
+  async deleteOrder(orderId) {
+    const order = await Order.findByIdAndDelete(orderId);
+
+    if (!order) {
+      throw new ApiError(404, "Order not found.");
+    }
+
+    return order;
   }
 
   // ==========================================

@@ -26,6 +26,10 @@ const navItems = [
     path: "/products",
   },
   {
+    name: "Dashboard",
+    path: "/dashboard",
+  },
+  {
     name: "Categories",
     path: "/categories",
   },
@@ -109,34 +113,6 @@ const MobileMenu = ({ isOpen, onClose }) => {
 
             </div>
 
-            {/* Search */}
-
-            <div className="p-5">
-
-              <div className="relative">
-
-                <FaSearch className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500" />
-
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  className="
-                    w-full
-                    rounded-full
-                    border
-                    pl-11
-                    pr-4
-                    py-3
-                    outline-none
-                    focus:ring-2
-                    focus:ring-green-500
-                  "
-                />
-
-              </div>
-
-            </div>
-
             {/* Navigation */}
 
             <nav className="flex-1 px-5">
@@ -203,7 +179,7 @@ const MobileMenu = ({ isOpen, onClose }) => {
               {isAuthenticated ? (
                 <>
                   <Link
-                    to="/profile"
+                    to="/dashboard"
                     onClick={onClose}
                     className="flex items-center gap-3"
                   >

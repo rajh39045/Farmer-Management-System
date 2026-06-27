@@ -28,11 +28,12 @@ const useProfile = () => {
       setLoading(true);
 
       const response = await getMe();
+      const user = response?.user || response || {};
 
       setProfile({
-        name: response.user.name || "",
-        email: response.user.email || "",
-        phone: response.user.phone || "",
+        name: user?.fullName || user?.name || "",
+        email: user?.email || "",
+        phone: user?.phone || "",
       });
     } catch (error) {
       toast.error(
@@ -70,7 +71,10 @@ const useProfile = () => {
     try {
       setSaving(true);
 
-      await updateProfile(profile);
+      await updateProfile({
+        ...profile,
+        name: profile.name || "",
+      });
 
       toast.success("Profile updated.");
     } catch (error) {

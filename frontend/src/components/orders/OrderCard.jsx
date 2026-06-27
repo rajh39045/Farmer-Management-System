@@ -9,6 +9,8 @@ const OrderCard = ({
   order,
   onCancel,
 }) => {
+  const status = order.orderStatus || order.status;
+
   return (
     <div className="bg-white rounded-2xl shadow-md p-6">
 
@@ -29,7 +31,7 @@ const OrderCard = ({
         </div>
 
         <OrderStatus
-          status={order.status}
+          status={status}
         />
 
       </div>
@@ -39,11 +41,11 @@ const OrderCard = ({
         {order.items.map((item) => (
 
           <div
-            key={item.product._id}
+            key={item._id || item.product?._id || item.name}
             className="flex justify-between"
           >
             <span>
-              {item.product.name}
+              {item.name || item.product?.name}
             </span>
 
             <span>
@@ -72,7 +74,7 @@ const OrderCard = ({
             View
           </SecondaryButton>
 
-          {order.status === "Pending" && (
+          {status === "Pending" && (
             <PrimaryButton
               onClick={() =>
                 onCancel(order._id)

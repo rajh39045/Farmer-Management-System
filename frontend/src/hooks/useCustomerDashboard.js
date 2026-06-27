@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import { getMe } from "../api/authApi";
-import { getOrders } from "../api/orderApi";
+import { getMyOrders } from "../api/orderApi";
 import { getWishlist } from "../api/wishlistApi";
 import { getCart } from "../api/cartApi";
 
@@ -31,22 +31,25 @@ const useCustomerDashboard = () => {
           cartRes,
         ] = await Promise.all([
           getMe(),
-          getOrders(),
+          getMyOrders(),
           getWishlist(),
           getCart(),
         ]);
 
         setUser(userRes.user);
 
-        setOrders(ordersRes.orders || []);
+        const visibleOrders = (ordersRes.orders || []).filter(
+          (order) => order.orderStatus !== "Cancelled"
+        );
+
+        setOrders(visibleOrders);
 
         setWishlistCount(
-          wishlistRes.wishlist?.items
-            ?.length || 0
+          wishlistRes?.wishlist?.products?.length || 0
         );
 
         setCartCount(
-          cartRes.cart?.items?.length || 0
+          cartRes?.cart?.items?.length || 0
         );
       } catch (error) {
         toast.error(
@@ -60,11 +63,32 @@ const useCustomerDashboard = () => {
 
   useEffect(() => {
     fetchDashboard();
+
+    const handleRefresh = () => {
+      fetchDashboard();
+    };
+
+    window.addEventListener(
+      "customer-dashboard-refresh",
+      handleRefresh
+    );
+
+    return () => {
+      window.removeEventListener(
+        "customer-dashboard-refresh",
+        handleRefresh
+      );
+    };
   }, [fetchDashboard]);
 
   const totalSpent = orders.reduce(
-    (sum, order) =>
-      sum + (order.totalAmount || 0),
+    (sum, order) => {
+      if (order.orderStatus === "Delivered") {
+        return sum + (order.totalAmount || 0);
+      }
+
+      return sum;
+    },
     0
   );
 

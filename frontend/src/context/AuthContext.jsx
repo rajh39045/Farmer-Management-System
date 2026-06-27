@@ -3,6 +3,7 @@ import { jwtDecode } from "jwt-decode";
 import {
   loginUser,
   logoutUser,
+  registerUser,
 } from "../api/authApi";
 
 export const AuthContext = createContext();
@@ -48,6 +49,12 @@ const AuthProvider = ({ children }) => {
     return data;
   };
 
+  const register = async (userData) => {
+    const data = await registerUser(userData);
+
+    return data;
+  };
+
   const logout = async () => {
     try {
       await logoutUser();
@@ -69,6 +76,7 @@ const AuthProvider = ({ children }) => {
         token,
         loading,
         login,
+        register,
         logout,
         isAuthenticated: !!token,
       }}

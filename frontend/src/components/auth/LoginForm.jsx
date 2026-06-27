@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import AuthHeader from "./AuthHeader";
@@ -11,6 +11,7 @@ import useAuth from "../../hooks/useAuth";
 
 const LoginForm = () => {
   const { login } = useAuth();
+  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     email: "",
@@ -45,6 +46,22 @@ const LoginForm = () => {
       });
 
       toast.success("Login successful.");
+
+      const token = localStorage.getItem("token");
+
+      if (token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+
+        if (payload.role === "admin") {
+          navigate("/admin/dashboard");
+        } else if (payload.role === "farmer") {
+          navigate("/farmer/dashboard");
+        } else if (payload.role === "customer") {
+          navigate("/customer/dashboard");
+        } else {
+          navigate("/");
+        }
+      }
 
     } catch (err) {
       toast.error(
