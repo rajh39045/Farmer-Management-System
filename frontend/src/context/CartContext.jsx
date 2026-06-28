@@ -49,6 +49,8 @@ const CartProvider = ({ children }) => {
 
       toast.success("Product added to cart");
 
+      window.dispatchEvent(new Event("cart-updated"));
+
       return data;
     } catch (error) {
       console.error(error);
@@ -74,6 +76,8 @@ const CartProvider = ({ children }) => {
 
       toast.success("Cart updated");
 
+      window.dispatchEvent(new Event("cart-updated"));
+
       return data;
     } catch (error) {
       console.error(error);
@@ -98,6 +102,8 @@ const CartProvider = ({ children }) => {
       setCart(data?.cart?.items || []);
 
       toast.success("Item removed");
+
+      window.dispatchEvent(new Event("cart-updated"));
 
       return data;
     } catch (error) {

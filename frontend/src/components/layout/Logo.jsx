@@ -53,10 +53,10 @@ const Logo = () => {
           <FaLeaf className="text-white text-2xl" />
         </div>
 
-        <div className="hidden sm:block">
+        <div className="block">
           <h1
             className="
-              text-2xl
+              text-xl sm:text-2xl
               font-extrabold
               text-green-700
               leading-none
@@ -67,7 +67,7 @@ const Logo = () => {
 
           <p
             className="
-              text-xs
+              text-[10px] sm:text-xs
               text-gray-500
               tracking-wider
             "

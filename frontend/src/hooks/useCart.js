@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 
 const useCart = () => {
@@ -9,6 +9,19 @@ const useCart = () => {
       "useCart must be used within a CartProvider"
     );
   }
+
+  // Listen for cart-updated event to refresh cart data
+  useEffect(() => {
+    const handleCartUpdate = () => {
+      context.fetchCart();
+    };
+
+    window.addEventListener("cart-updated", handleCartUpdate);
+
+    return () => {
+      window.removeEventListener("cart-updated", handleCartUpdate);
+    };
+  }, [context]);
 
   return context;
 };

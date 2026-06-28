@@ -73,10 +73,10 @@ const ProductInfo = ({ product }) => {
           </Badge>
         )}
 
-        {product.stock > 0 ? (
+        {(product.quantity || product.stock || 0) > 0 ? (
           <Badge variant="success">
             <FaBoxOpen className="mr-2" />
-            In Stock
+            In Stock ({(product.quantity || product.stock)} left)
           </Badge>
         ) : (
           <Badge variant="error">

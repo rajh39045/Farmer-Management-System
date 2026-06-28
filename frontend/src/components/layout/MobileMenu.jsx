@@ -103,9 +103,14 @@ const MobileMenu = ({ isOpen, onClose }) => {
 
             <div className="flex items-center justify-between p-5 border-b">
 
-              <h2 className="text-2xl font-bold text-green-600">
-                Krishi Market
-              </h2>
+              <div>
+                <h2 className="text-2xl font-bold text-green-600">
+                  Krishi Market
+                </h2>
+                <p className="text-xs text-gray-500 tracking-wider mt-1">
+                  Fresh • Organic • Direct
+                </p>
+              </div>
 
               <button onClick={onClose}>
                 <FaTimes className="text-2xl" />

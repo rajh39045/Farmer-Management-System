@@ -29,7 +29,8 @@ const ProductActions = ({ product }) => {
   const [loading, setLoading] = useState(false);
 
   const increaseQuantity = () => {
-    if (quantity < product.quantity) {
+    const maxQuantity = product.quantity || product.stock || 0;
+    if (quantity < maxQuantity) {
       setQuantity((prev) => prev + 1);
     }
   };
@@ -47,20 +48,18 @@ const ProductActions = ({ product }) => {
       return;
     }
 
-    try {
-      setLoading(true);
+      try {
+        setLoading(true);
 
-      await addItemToCart({
-        productId: product._id,
-        quantity,
-      });
-
-      toast.success("Added to cart.");
-    } catch (error) {
-      toast.error("Unable to add product.");
-    } finally {
-      setLoading(false);
-    }
+        await addItemToCart({
+          productId: product._id,
+          quantity,
+        });
+      } catch (error) {
+        toast.error("Unable to add product.");
+      } finally {
+        setLoading(false);
+      }
   };
 
   const handleWishlist = async () => {
@@ -160,7 +159,7 @@ const ProductActions = ({ product }) => {
           loading={loading}
           icon={<FaShoppingCart />}
           onClick={handleAddToCart}
-          disabled={product.stock === 0}
+          disabled={(product.quantity || product.stock || 0) === 0}
           fullWidth
         >
           Add To Cart
@@ -177,7 +176,7 @@ const ProductActions = ({ product }) => {
         <PrimaryButton
           icon={<FaBolt />}
           onClick={handleBuyNow}
-          disabled={product.stock === 0}
+          disabled={(product.quantity || product.stock || 0) === 0}
           fullWidth
           className="bg-gradient-to-r from-orange-500 to-red-500"
         >
@@ -195,14 +194,14 @@ const ProductActions = ({ product }) => {
           text-center
           font-semibold
           ${
-            product.stock > 0
+            (product.quantity || product.stock || 0) > 0
               ? "bg-green-100 text-green-700"
               : "bg-red-100 text-red-700"
           }
         `}
       >
-        {product.stock > 0
-          ? `${product.stock} Items Available`
+        {(product.quantity || product.stock || 0) > 0
+          ? `${product.quantity || product.stock} Items Available`
           : "Currently Out of Stock"}
       </div>
 

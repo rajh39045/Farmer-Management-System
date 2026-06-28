@@ -40,6 +40,7 @@ const useFarmerOrders = () => {
       toast.success("Order updated successfully.");
 
       fetchOrders();
+      window.dispatchEvent(new Event("farmer-dashboard-refresh"));
     } catch (error) {
       toast.error(
         error.response?.data?.message ||

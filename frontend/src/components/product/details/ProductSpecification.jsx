@@ -23,7 +23,7 @@ const ProductSpecification = ({ product }) => {
     },
     {
       label: "Available Stock",
-      value: product.stock,
+      value: product.quantity || product.stock || 0,
     },
     {
       label: "Organic",

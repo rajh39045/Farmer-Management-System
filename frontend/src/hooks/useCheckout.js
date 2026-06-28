@@ -116,6 +116,9 @@ const useCheckout = () => {
 
       await clearCart();
 
+      window.dispatchEvent(new Event("farmer-dashboard-refresh"));
+      window.dispatchEvent(new Event("customer-dashboard-refresh"));
+
       navigate("/orders");
     } catch (error) {
       toast.error(

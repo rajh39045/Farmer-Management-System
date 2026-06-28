@@ -76,7 +76,7 @@ const LoginForm = () => {
   return (
     <>
       <AuthHeader
-        title="Welcome Back 👋"
+        title="Welcome Back "
         subtitle="Login to continue shopping fresh products directly from farmers."
         linkText="Don't have an account?"
         linkLabel="Register"

@@ -39,6 +39,7 @@ const useOrders = () => {
 
       fetchOrders();
       window.dispatchEvent(new Event("customer-dashboard-refresh"));
+      window.dispatchEvent(new Event("farmer-dashboard-refresh"));
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
