@@ -208,10 +208,10 @@ const HeroSection = () => {
               </div>
             </motion.div>
 
-            {/* Floating stat cards with better positioning */}
+            {/* Floating stat cards - desktop only (floating) */}
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="floating-card absolute top-6 left-0 sm:left-4 lg:-left-6 bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-xl border border-green-100"
+              className="floating-card absolute top-6 left-0 sm:left-4 lg:-left-6 hidden lg:block bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-xl border border-green-100"
             >
 
               <div className="flex items-center gap-4">
@@ -228,7 +228,7 @@ const HeroSection = () => {
 
             <motion.div
               whileHover={{ scale: 1.05 }}
-              className="floating-card absolute bottom-6 right-0 sm:right-4 lg:-right-6 bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-xl border border-green-100"
+              className="floating-card absolute bottom-6 right-0 sm:right-4 lg:-right-6 hidden lg:block bg-white/95 backdrop-blur-sm p-5 sm:p-6 rounded-2xl shadow-xl border border-green-100"
             >
 
               <div className="flex items-center gap-4">
@@ -243,23 +243,41 @@ const HeroSection = () => {
 
             </motion.div>
 
-            {/* Additional floating card for mobile */}
-            <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="floating-card absolute bottom-6 left-1/2 -translate-x-1/2 lg:hidden bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-green-100"
-            >
-
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
-                  <FaTruck className="text-green-600" />
+            {/* Mobile stat cards - displayed below image on mobile */}
+            <div className="lg:hidden mt-6 grid grid-cols-3 gap-3">
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-green-100 text-center"
+              >
+                <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mx-auto mb-2">
+                  <FaLeaf className="text-xl text-green-600" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-green-600">24h</h3>
-                  <p className="text-xs text-gray-500">Fast Delivery</p>
-                </div>
-              </div>
+                <h3 className="text-xl font-bold text-green-600">500+</h3>
+                <p className="text-xs text-gray-500">Verified Farmers</p>
+              </motion.div>
 
-            </motion.div>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-green-100 text-center"
+              >
+                <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center mx-auto mb-2">
+                  <FaStar className="text-xl text-emerald-600" />
+                </div>
+                <h3 className="text-xl font-bold text-emerald-600">10K+</h3>
+                <p className="text-xs text-gray-500">Happy Customers</p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="bg-white/95 backdrop-blur-sm p-4 rounded-2xl shadow-xl border border-green-100 text-center"
+              >
+                <div className="w-12 h-12 rounded-xl bg-green-50 flex items-center justify-center mx-auto mb-2">
+                  <FaTruck className="text-xl text-green-600" />
+                </div>
+                <h3 className="text-xl font-bold text-green-600">24h</h3>
+                <p className="text-xs text-gray-500">Fast Delivery</p>
+              </motion.div>
+            </div>
 
           </div>
 
